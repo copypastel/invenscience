@@ -1,0 +1,23 @@
+1. Basic functions of the system
+	Actor    - Someone who desires an inventory system
+	Supplier - A company that provides product online
+	
+	1.1 
+		Scenario: Actor wishes to setup a new system.
+		Process:  Actor downloads the source via git and runs merb
+		Result:   Actor can now visit localhost:4000 and see the invenscience setup page (like php!).
+	1.2 
+		Scenario: Actor wishes to add a new supplier to the system
+		Process:  Actor selects add supplier from a menu.  
+				  Actor is given a combo box with choices of custom or from templates.
+		
+		1.2.A Actor selects custom and is prompted to give the name of the supplier.
+			Result: A code template is created in app/suppliers for the user to fill out.
+		1.2.B Actor selects from templates.
+			Result: System goes on line to get a list of available parsers and returns the list for the user to select.
+					The Parser is then copied into app/suppliers.
+					
+	1.3
+		Scenario: Actor wishes to add an item from an unknown supplier
+		Process:  Actor copies the URI of the item and pastes it in proper area
+		Result:   System searches for suppliers domain name and upon failure enters use case 1.2
