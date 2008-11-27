@@ -2,7 +2,7 @@ require 'rubygems'
 require 'mechanize'
 require 'hpricot'
 
-class Supplier
+module SparkfunParser
   def query( search_string)
     agent = WWW::Mechanize.new
     items = []
@@ -25,7 +25,20 @@ class Supplier
   end
 end
 
-
+class Warehouse
+  #def query(search_string)
+  #  raise "This is not implemented!"
+  #end
+#  include SparkfunParser
+  
+  def set_parser(parser)
+    self.class.class_eval do 
+      include parser
+    end
+    puts parser.to_s
+  end
+end
+  
 class Item
   attr_accessor :name
   attr_accessor :serial
@@ -40,4 +53,13 @@ class Item
   end
 end
 
-puts Supplier.new.query('arduino')
+sparkFun = Warehouse.new
+begin 
+  puts sparkFun.query('arduino')
+rescue
+  puts "Tada not implemented"
+end
+
+sparkFun.set_parser(SparkfunParser)
+
+puts sparkFun.query('arduino')
