@@ -21,4 +21,7 @@ end
  
 Merb::BootLoader.after_app_loads do
   # This will get executed after your app's classes have been loaded.
+  
+  # Parsers
+  require 'app/parsers/sparkfun.rb'
 end
