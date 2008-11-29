@@ -1,27 +1,34 @@
-module Sparkfun
-  
-  def query( parameter )
-    agent = WWW::Mechanize.new
-    items = []
-    agent.get('http://www.sparkfun.com/commerce/categories.php') do |page|
-      results = page.form_with(:name => 'quick_find') do |search|
-        search.keywords = search_string
-      end.submit
+class Parser
+  module Sparkfun
 
-      doc = Hpricot(results.body)
+    # Remember to implement comparable for items
+    def query( item )
+      agent = WWW::Mechanize.new
+      items = []
+      agent.get('http://www.sparkfun.com/commerce/categories.php') do |page|
+        results = page.form_with(:name => 'quick_find') do |search|
+          search.keywords = search_string
+        end.submit
 
-      (doc/"a.product_name").each do |link|
-        item = Item.new do |i|
-          i.name = link.innerHTML
+        doc = Hpricot(results.body)
+
+        (doc/"a.product_name").each do |link|
+          item = Item.new do |i|
+            i.name = link.innerHTML
+          end
+          items << item
         end
-        items << item
       end
-
+      items
     end
-    items
+
+    def order( items )
+      raise NotImplemented
+    end
+
+    def price( items )
+      raise NotImplemented
+    end
+
   end
-  
-  def order
-  end
-  
 end
