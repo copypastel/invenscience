@@ -1,4 +1,4 @@
-class Sparkfun < Supplier
+module Sparkfun
   
   def query( parameter )
     agent = WWW::Mechanize.new
