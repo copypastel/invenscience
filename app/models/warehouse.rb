@@ -5,6 +5,9 @@ class Warehouse
   property :name, String, :nullable => false
   property :parser, Object
   
+  has n, :details
+  has n, :orders, :through => :details
+  
   def method_missing(method_name, *args)
 
     extend parser unless parser.nil?
