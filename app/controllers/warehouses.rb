@@ -1,4 +1,4 @@
-class Suppliers < Application
+class Warehouses < Application
 
   # ...and remember, everything returned from an action
   # goes to the client...

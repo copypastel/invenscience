@@ -1,4 +1,4 @@
-class Supplier
+class Warehouse
   include DataMapper::Resource
   
   property :id, Serial

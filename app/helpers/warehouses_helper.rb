@@ -1,5 +1,5 @@
 module Merb
-  module SuppliersHelper
+  module WarehousesHelper
 
   end
 end # Merb
