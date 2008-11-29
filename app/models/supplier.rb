@@ -3,22 +3,18 @@ class Supplier
   
   property :id, Serial
   property :name, String, :nullable => false
-  property :type, Discriminator
-#  property :parser, Object, :default => Supplier::DEFAULT_PARSER
+  property :parser, Object
   
+  def method_missing(method_name, *args)
 
-  # Prepares the supplier object by mixing in the methods
-  # provided by its parser to perform search/ordering
-=begin
-  def prepare
-    class << self
-      begin
-        include self.parser
-      rescue NoMethodError
-        include Supplier::DEFAULT_PARSER
-      end
+    extend parser unless parser.nil?
+
+    if self.respond_to?(method_name)
+      self.send( method_name, *args)
+    else
+      super
     end
+    
   end
-=end
 
 end
