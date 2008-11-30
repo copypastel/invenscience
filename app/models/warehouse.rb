@@ -4,9 +4,11 @@ class Warehouse
   property :id, Serial
   property :name, String, :nullable => false
   property :parser, Object
-  
-  has n, :details
+
+  has n, :items  
+  has n, :details, :through => :items
   has n, :orders, :through => :details
+
   
   def method_missing(method_name, *args)
 
@@ -18,6 +20,17 @@ class Warehouse
       super
     end
     
+  end
+
+  # Receive a url for an item.
+  # Return an array with all items that were parsed from that url.
+  def self.parse(uri)
+    Warehouse.all.each {|w| return w.parse(uri) if w.parsable?(uri)}
+    nil
+  end
+  
+  def self.price(item, quantity = nil)
+    item.warehouse.price( item, quantity )
   end
 
 end
