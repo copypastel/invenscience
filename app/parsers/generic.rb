@@ -1,4 +1,4 @@
-class Parser
+module Parser
   module Generic
 
     # parameters:

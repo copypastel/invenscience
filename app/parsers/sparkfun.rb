@@ -1,33 +1,42 @@
-class Parser
+module Parser
   module Sparkfun
 
+    @@url_regex = /.*sparkfun.com\/.*/
+    @@user_agent = 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_5_5; en-us) AppleWebKit/525.26.2 (KHTML, like Gecko) Version/3.2 Safari/525.26.12'
+
     # Remember to implement comparable for items
-    def query( item )
-      agent = WWW::Mechanize.new
-      items = []
-      agent.get('http://www.sparkfun.com/commerce/categories.php') do |page|
-        results = page.form_with(:name => 'quick_find') do |search|
-          search.keywords = search_string
-        end.submit
-
-        doc = Hpricot(results.body)
-
-        (doc/"a.product_name").each do |link|
-          item = Item.new do |i|
-            i.name = link.innerHTML
-          end
-          items << item
-        end
-      end
-      items
-    end
 
     def order( items )
       raise NotImplemented
     end
 
-    def price( items )
-      raise NotImplemented
+    def price( item, quantity = nil )
+      page = Hpricot(open(item.uri, 'User-Agent' => @@user_agent))
+      prices = {}
+      prices[1..9] = page.at('#price_content > form > table > tr:nth(2) > th').inner_html[1..-1].to_f
+      prices[10..99] = page.at('#price_content > form > table > tr:nth(3) > th').inner_html[1..-1].to_f
+      prices[100..1/0.0] = page.at('#price_content > form > table > tr:nth(4) > th').inner_html[1..-1].to_f
+      if quantity.nil?
+        return prices
+      else
+        (prices.select {|key, value| key.include? quantity })[0][1]
+      end
+    end
+
+
+    # Returns item parsed from the uri parameter
+    def parse(uri)
+      unless parsable?(uri)
+        return nil
+      else
+        page = Hpricot(open(uri, 'User-Agent' => @@user_agent))
+        name = page.at('h2.product_name').inner_html
+        return Item.new(:warehouse => self, :name => name, :uri => uri)
+      end
+    end
+
+    def parsable?(url)
+      (url =~ @@url_regex).nil? ? false : true
     end
 
   end
