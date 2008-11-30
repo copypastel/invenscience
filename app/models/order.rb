@@ -6,7 +6,7 @@ class Order
   property :id, Serial
   property :pending, Boolean
 
-  alias :pending?, :pending
+  alias :pending :pending?
 
   has n, :details
   has n, :items, :through => :details
