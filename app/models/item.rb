@@ -5,6 +5,9 @@ class Item
   property :name, String, :nullable => false
   property :description, Text
   property :uri, Text, :nullable => false
+  property :stock, Integer
+  property :updated_at, DateTime
+  property :created_at, DateTime
   
   has n, :details
   has n, :orders, :through => :details

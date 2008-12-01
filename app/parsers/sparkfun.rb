@@ -31,7 +31,8 @@ module Parser
       else
         page = Hpricot(open(uri, 'User-Agent' => @@user_agent))
         name = page.at('h2.product_name').inner_html
-        return Item.new(:warehouse => self, :name => name, :uri => uri)
+        stock = page.at("table.pricing td").inner_html.split(' ').first.to_i
+        return Item.new(:warehouse => self, :name => name, :uri => uri, :stock => stock)
       end
     end
 
