@@ -4,7 +4,7 @@ class Order
   # Remember to implement enumerable module for Order
   
   property :id, Serial
-  property :pending, Boolean
+  property :pending, Boolean, :default => true
 
   alias :pending :pending?
 
