@@ -2,12 +2,13 @@ class Warehouse
   include DataMapper::Resource
   
   property :id, Serial
-  property :name, String, :nullable => false
+  property :name, String, :nullable => false, :unique => true
   property :parser, Object
 
   has n, :items  
   has n, :details, :through => :items
   has n, :orders, :through => :details
+  has n, :carts
 
   
   def method_missing(method_name, *args)
@@ -31,6 +32,14 @@ class Warehouse
   
   def self.price(item, quantity = nil)
     item.warehouse.price( item, quantity )
+  end
+
+  # Need a much better name
+  def self.place_in_cart(order)
+    details = order.details
+    order.warehouses.each do |warehouse|
+      warehouse.place_in_cart(details.select {|d| d.warehouse == warehouse})
+    end
   end
 
 end

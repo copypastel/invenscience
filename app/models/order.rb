@@ -10,16 +10,27 @@ class Order
 
   has n, :details
   has n, :items, :through => :details
-  has n, :warehouses, :through => :items
+  # Causes a stack overflow for some reason
+  #has n, :warehouses, :through => :items 
+  has n, :carts
 
   # Place the order
   # Needs to go organize the details according to warehouse, and place an order for each
   def place
+    Warehouse.place_in_cart(self)
+    carts
+  end
+  
+  # Warning, this is much slower since it's not using SQL at the moment. FIX... eventually. 
+  def warehouses
+    ws = []
+    items.each { |i| ws << i.warehouse unless ws.include? i.warehouse}
+    ws
   end
   
   def add(item, quantity)
     return nil if quantity <= 0
-    if items.include? item
+    unless items.include?(item).nil?
       detail = details.first(:item_id => item.id)
       detail.quantity += quantity
       detail.price = item.price(detail.quantity) * 100
@@ -33,7 +44,7 @@ class Order
   
   # Return total for the order
   def total
-    total = 0
+    total
     details.each {|d| total += d.price * d.quantity }
     total / 100.0 # Divide by 100.0 since prices in details are saved in cents
   end
