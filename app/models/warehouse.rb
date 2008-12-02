@@ -3,35 +3,28 @@
 # TODO: Figure out how to move this after warehouse
 module ParserManager
   def self.included(warehouse)
-    warehouse.before :save, :check_parser
-    warehouse.after  :save, :cleanup_parser
     warehouse.extend ClassMethods
   end
   
-  @dirty_parser = false
-  
-  # Setup code for cleanup_parser
-  def check_parser()
-    @dirty_parser = self.attribute_dirty?(:parser)
-  end
-  
-  # Handles when a parser is changed
-  def cleanup_parser() 
-    if @dirty_parser and not self.parser.nil?
+  def attribute_set(name, value)
+    result = super(name,value)
+    if name == :parser and attribute_dirty?(:parser) 
       # *Need to figure out how to unextend previous parser!
       # *Luckily the method used is the latest module extended 
-      extend self.parser
+      extend self.parser if not self.parser.nil?
     end
+    result
   end
-
+  
   module ClassMethods
     # Handles when an object is retrieved from the database
     def load(values, query)
       warehouse = super(values,query)
       warehouse.extend warehouse.parser unless warehouse.parser.nil?
       warehouse
-    end
+    end        
   end
+  
 end
 
 class Warehouse  
