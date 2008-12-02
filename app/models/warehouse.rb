@@ -47,7 +47,7 @@ class Warehouse
   has n, :orders, :through => :details
   has n, :carts
     
-  # Receive a url for an item.
+  # Receive a url for an item. 
   # Return an array with all items that were parsed from that url.
   def self.parse(uri)
     Warehouse.all.each {|w| return w.parse(uri) if w.parsable?(uri)}
