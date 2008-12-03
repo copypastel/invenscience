@@ -1,5 +1,5 @@
 require File.join(File.dirname(__FILE__), '..', 'spec_helper.rb')
-
+=begin
 given "a order exists" do
   Order.all.destroy!
   request(resource(:orders), :method => "POST", 
@@ -105,6 +105,6 @@ describe "resource(@order)", :given => "a order exists" do
       @response.should redirect_to(resource(@order))
     end
   end
-  
 end
+=end
 
