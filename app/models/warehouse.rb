@@ -33,7 +33,7 @@ class Warehouse
   
   property :id, Serial
   property :name, String, :nullable => false, :unique => true
-  property :parser, Object
+  property :parser, Object, :nullable => false
 
   has n, :items  
   has n, :details, :through => :items
