@@ -51,12 +51,8 @@ module WarehouseSpecHelper
 end
 
 shared_examples_for "a new record" do
-  it "should be a new record if virgin" do
-    virgin_warehouse.new_record?.should be_true
-  end
-  
-  it "should be a new record if valid" do
-    valid_warehouse.new_record?.should be_true
+  it "should be a new record" do
+    @warehouse.should be_new_record
   end
 end
 
