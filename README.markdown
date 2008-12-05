@@ -22,6 +22,7 @@ They live inside app/parsers, and should be namespaced inside the Parser module.
 Warehouses are the alter-egos to parts providers. In short, they represent a collection of items, and also serve as the gateway to parse websites (a Warehouse includes a Parser's methods).
 #### New Warehouse
 Setting a parser is easy and simple!
+
     w = Warehouse.new
     w.name = 'Sparkfun'
     w.parser = Parser::Sparkfun
@@ -29,5 +30,6 @@ Setting a parser is easy and simple!
 
 #### Existing Warehouse
 But does not need to be repeated excessively
+
 	w = Warehouse.get(:name => 'Sparkfun')
 	w.parse "http://www.sparkfun.com/commerce/product_info.php?products_id=9000" # => #<Item>
