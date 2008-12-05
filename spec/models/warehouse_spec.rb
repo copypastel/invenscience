@@ -61,7 +61,7 @@ shared_examples_for "a functioning parser manager" do
   include WarehouseSpecHelper
   
   it "should not be able to parse without parser set"# do
-#    @warehouse.parser = nil if @warehouse.parser
+    #@warehouse.parser = nil if @warehouse.parser
     
 #    lambda { @warehouse.parse(good_uri) }.should raise_error(NoMethodError)
 #  end
@@ -120,6 +120,10 @@ describe Warehouse do
     it "should have two errors after valid check" do
       @warehouse.should_not be_valid
       @warehouse.errors.length.should be(2)
+    end
+    
+    it "should not have a default parser" do
+      lambda { @warehouse.parse(good_uri) }.should raise_error(NoMethodError)
     end
     
     it_should_behave_like "a functioning parser manager"

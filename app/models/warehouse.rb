@@ -29,7 +29,7 @@ end
 
 class Warehouse  
   include DataMapper::Resource
-  include ::ParserManager
+  include ParserManager
   
   property :id, Serial
   property :name, String, :nullable => false, :unique => true
@@ -39,25 +39,28 @@ class Warehouse
   has n, :details, :through => :items
   has n, :orders, :through => :details
   has n, :carts
-    
-  # Receive a url for an item. 
-  # Return an array with all items that were parsed from that url.
-  def self.parse(uri)
-    Warehouse.all.each {|w| return w.parse(uri) if w.parsable?(uri)}
-    nil
-  end
   
-  def self.price(item, quantity = nil)
-    item.warehouse.price( item, quantity )
-  end
+  #Class Methods.  Instance methods inherited from parser
+  class << self
+    # Receive a url for an item. 
+    # Return an array with all items that were parsed from that url.
+    def parse(uri)
+      Warehouse.all.each {|w| return w.parse(uri) if w.parsable?(uri)}
+      nil
+    end
+  
+    def price(item, quantity = nil)
+      item.warehouse.price( item, quantity )
+    end
 
-  # Need a much better name
-  def self.place_in_cart(order)
-    details = order.details
-    order.warehouses.each do |warehouse|
-      warehouse.place_in_cart(details.select {|d| d.warehouse == warehouse})
+    # Need a much better name
+    def place_in_cart(order)
+      details = order.details
+      order.warehouses.each do |warehouse|
+        warehouse.place_in_cart(details.select {|d| d.warehouse == warehouse})
+      end
     end
   end
-
+  
 end
 
