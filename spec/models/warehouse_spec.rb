@@ -27,10 +27,6 @@ module WarehouseSpecHelper
     "Good URI" #Could switch this to http:// and have a bad_uri for testing
   end
   
-  def virgin_warehouse
-    Warehouse.new
-  end
-  
   def valid_warehouse
     warehouse = Warehouse.new
     warehouse.name = "Valid Name"
@@ -100,9 +96,9 @@ end
 describe Warehouse do
   include WarehouseSpecHelper
   
-  describe "(virgin)" do
+  describe "when newly created" do
     before(:each) do
-      @warehouse = virgin_warehouse
+      @warehouse = Warehouse.new
     end
     
     it_should_behave_like "a new record"
@@ -125,30 +121,16 @@ describe Warehouse do
     it "should not have a default parser" do
       lambda { @warehouse.parse(good_uri) }.should raise_error(NoMethodError)
     end
-    
-    it_should_behave_like "a functioning parser manager"
-    
-  end
-    
-  describe "(unsaved)" do
-    before(:each) do
-      @warehouse = valid_warehouse
+       
+    it "should not be valid without a name" do
+      Kernel.system("growlnotify -m " + "HELLO")
+      #@warehouse.errors_on(:name).should be_valid
     end
     
-    it_should_behave_like "a new record" 
-    
-    it "should not be valid without #name" do
-      warehouse      = valid_warehouse      
-      warehouse.name = nil
+    it "should not be valid without parser()" do
+      @warehouse.parser = nil
       
-      warehouse.should_not be_valid
-    end
-    
-    it "should not be valid without #parser" do
-      warehouse        = valid_warehouse
-      warehouse.parser = nil
-      
-      warehouse.should_not be_valid
+      @warehouse.should_not be_valid
     end
     
     it_should_behave_like "a functioning parser manager"
