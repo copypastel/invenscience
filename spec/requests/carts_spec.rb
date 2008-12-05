@@ -1,5 +1,5 @@
 require File.join(File.dirname(__FILE__), '..', 'spec_helper.rb')
-
+=begin
 given "a cart exists" do
   Cart.all.destroy!
   request(resource(:carts), :method => "POST", 
@@ -105,6 +105,6 @@ describe "resource(@cart)", :given => "a cart exists" do
       @response.should redirect_to(resource(@cart))
     end
   end
-  
 end
+=end
 
