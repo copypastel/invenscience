@@ -1,35 +1,6 @@
-# You can integrate this into Warehouse if this is too complicated
-# but it provides nice seperation of code
-# TODO: Figure out how to move this after warehouse
-module ParserManager
-  def self.included(warehouse)
-    warehouse.extend ClassMethods
-  end
-  
-  def attribute_set(name, value)
-    result = super(name,value)
-    if name == :parser and attribute_dirty?(:parser) 
-      # *Need to figure out how to unextend previous parser!
-      # *Luckily the method used is the latest module extended 
-      extend self.parser if not self.parser.nil?
-    end
-    result
-  end
-  
-  module ClassMethods
-    # Handles when an object is retrieved from the database
-    def load(values, query)
-      warehouse = super(values,query)
-      warehouse.extend warehouse.parser unless warehouse.parser.nil?
-      warehouse
-    end        
-  end
-  
-end
-
 class Warehouse  
   include DataMapper::Resource
-  include ParserManager
+  include Parser::Manager
   
   property :id, Serial
   property :name, String, :nullable => false, :unique => true

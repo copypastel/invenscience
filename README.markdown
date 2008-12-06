@@ -29,7 +29,7 @@ Setting a parser is easy and simple!
     w.parse "http://www.sparkfun.com/commerce/product_info.php?products_id=9000" # => #<Item>
 
 #### Existing Warehouse
-But does not need to be repeated excessively
+But is repeated excessively.
 
-	w = Warehouse.get(:name => 'Sparkfun')
+	w = Warehouse.first(:name => 'Sparkfun')
 	w.parse "http://www.sparkfun.com/commerce/product_info.php?products_id=9000" # => #<Item>
