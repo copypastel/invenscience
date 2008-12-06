@@ -17,12 +17,10 @@ Merb::Config.use do |c|
 end
  
 Merb::BootLoader.before_app_loads do
-  # This will get executed after dependencies have been loaded but before your app's classes have loaded.
+  Merb.remove_paths(:model)
+  Merb.push_path(:parser, Merb.root / "app" / "parsers")
+  Merb.push_path(:model, Merb.root / "app" / "models")
 end
  
 Merb::BootLoader.after_app_loads do
-  # This will get executed after your app's classes have been loaded.
-  
-  # Parsers
-  require 'app/parsers/sparkfun.rb'
 end
