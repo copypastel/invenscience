@@ -1,29 +1,35 @@
 module Parser
-  # This is to be included by a model wishing to have parsers
-  # attached to them.
-  module Manager
-    def self.included(manager)
-      manager.extend ClassMethods
+  # A class wishing to use the various parsers should include the proxy module.
+  # They must define a parser variable
+  module Proxy
+    # paramaters:
+    #   uri         uri of an item
+    # returns:
+    # => Item, an item with all of the details filled out from the uri
+    def parse( uri )
+      self.parser.parse(uri)
+    end
+    # parameters:
+    #   string      string to search for 
+    # returns:
+    # => Array[Item], an array of all items that matched the search string
+    def query( string )
+      self.parser.query(string)
     end
 
-    def attribute_set(name, value)
-      result = super(name,value)
-      if name == :parser and attribute_dirty?(:parser) 
-        # *Need to figure out how to unextend previous parser!
-        # *Luckily the method used is the latest module extended 
-        extend self.parser if not self.parser.nil?
-      end
-      result
+    # paramaters:
+    #   items       list or single item
+    # return: 
+    # => Array[Fixnum] or Fixnum, a fixnum representing the cost of the item or items
+    def price( items )
+      self.parser.price(items)
     end
 
-    module ClassMethods
-      # Handles when an object is retrieved from the database
-      def load(values, query)
-        manager = super(values,query)
-        manager.extend manager.parser unless manager.parser.nil?
-        manager
-      end        
+    # parameters:
+    #   items     hash, where the keys are the items to be ordered, and the values 
+    #               are the amount to order for each item.
+    def order( items )
+      self.parser.order(items) 
     end
-
   end
 end

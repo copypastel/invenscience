@@ -1,5 +1,6 @@
 require File.join( File.dirname(__FILE__), '..', "spec_helper" )
-require File.join( File.dirname(__FILE__), 'factories', 'warehouse_factory' )
+require File.dirname(__FILE__) + "/../parsers/shared_parser_examples"
+require File.join( File.dirname(__FILE__),'factories','warehouse_factory' )
 
 #-----------------------------------------#
 #           Shared Examples               #
@@ -15,11 +16,54 @@ end
 #            Warehouse Spec               #
 #-----------------------------------------#
 describe Warehouse do
-    
-  describe "when newly created" do
+  describe "when first created" do
     before(:each) do
       @warehouse = Factory::Warehouse[:new]
     end
+  end
+  
+  describe "when valid" do
+    before(:each) do
+      @warehouse = Factory::Warehouse[:valid]
+    end
+    
+    it "should have a human readable identifier" do
+      @warehouse.should respond_to(:name)
+    end
+    
+    it "should have a unique name" do
+      @warehouse.save.should be(true)
+      @copy = Factory::Warehouse[:valid]
+      
+      @copy.should be(:valid)
+      @copy.name = @warehouse.name
+      @copy.should_not be(:valid)
+    end
+  end
+  
+  describe "should be a proxy and" do
+    before(:all) do
+      @parser = Factory::Warehouse[:new]
+    end
+    
+    it_should_behave_like "a parser with required methods"
+  end
+   # it "should be able to parse its website"# do
+ #     @parser = @warehouse
+      
+  #  end
+end
+
+
+=begin
+  describe "when newly created" do
+    
+    before(:each) do
+      @warehouse = Factory::Warehouse[:new]
+    end
+    
+#    it_should_have_property(:name)   with(:unique => true)
+#    it_should_have_property(:parser) with(:unique => true)
     
     it_should_behave_like "a new record"
     
@@ -81,5 +125,5 @@ describe Warehouse do
       @warehouse.should_not be(:valid)
     end
   end
-  
-end
+
+=end
