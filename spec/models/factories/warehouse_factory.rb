@@ -1,6 +1,3 @@
-require File.join( File.dirname(__FILE__), 'factory' )
-require File.join( File.dirname(__FILE__), 'parser_factory' )
-
 #You have to be EXTREEMLY careful with scope... Maybe need to add WarehouseFactory in
 module Factory
   
@@ -11,9 +8,6 @@ module Factory
     
     def initialize
       @new = true
-    end
-    
-    def new()
     end
     
     def new_model

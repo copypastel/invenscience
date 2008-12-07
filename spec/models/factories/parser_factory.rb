@@ -1,5 +1,3 @@
-require File.join( File.dirname(__FILE__), 'factory' )
-
 module Factory
   class Parser < Base
     
