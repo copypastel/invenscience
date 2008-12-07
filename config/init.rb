@@ -17,9 +17,9 @@ Merb::Config.use do |c|
 end
  
 Merb::BootLoader.before_app_loads do
-  Merb.remove_paths(:model)
-  Merb.push_path(:parser, Merb.root / "app" / "parsers")
-  Merb.push_path(:model, Merb.root / "app" / "models")
+  # This will get executed after dependencies have been loaded but before your app's classes have loaded.
+  Merb.push_path(:parser, Merb.root / 'app' / 'parsers')
+  Merb::BootLoader::LoadClasses.load_classes( Merb.root / 'app' / 'parsers' / '*')
 end
  
 Merb::BootLoader.after_app_loads do
