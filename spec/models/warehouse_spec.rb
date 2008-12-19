@@ -1,5 +1,8 @@
 require File.join( File.dirname(__FILE__), '..', "spec_helper" )
+require File.dirname(__FILE__) + "/../parsers/shared_parser_examples"
+require File.join( File.dirname(__FILE__),'factories','warehouse_factory' )
 
+<<<<<<< HEAD:spec/models/warehouse_spec.rb
 module WarehouseSpecHelper
   # See parser specs for parser functionality!
   module ValidParser1
@@ -47,80 +50,97 @@ module WarehouseSpecHelper
 end
 
 shared_examples_for "a new record" do
+=======
+#-----------------------------------------#
+#           Shared Examples               #
+#-----------------------------------------#
+shared_examples_for "a new record" do     
+>>>>>>> master:spec/models/warehouse_spec.rb
   it "should be a new record" do
     @warehouse.should be_new_record
   end
 end
 
-#A parser manager has the ability to manipulate the different parsers it implements
-shared_examples_for "a functioning parser manager" do
-  include WarehouseSpecHelper
-  
-  it "should not be able to parse without parser set"# do
-    #@warehouse.parser = nil if @warehouse.parser
-    
-#    lambda { @warehouse.parse(good_uri) }.should raise_error(NoMethodError)
-#  end
 
-  it "should be able to parse once parser is set" do
-    @warehouse.parser = WarehouseSpecHelper::ValidParser1 if @warehouse.parser.nil?
-    
-    lambda { @warehouse.parse(good_uri) }.should_not raise_error()
-    @warehouse.parse(good_uri).should == @warehouse.parser.responce #be(string) does not work
+#-----------------------------------------#
+#            Warehouse Spec               #
+#-----------------------------------------#
+describe Warehouse do
+  describe "when first created" do
+    before(:each) do
+      @warehouse = Factory::Warehouse[:new]
+    end
   end
   
-  it "should be able to parse once parser is changed" do
-    @warehouse.parser = WarehouseSpecHelper::ValidParser1
-    @warehouse.parse(good_uri).should == WarehouseSpecHelper::ValidParser1.responce
+  describe "when valid" do
+    before(:each) do
+      @warehouse = Factory::Warehouse[:valid]
+    end
     
-    @warehouse.parser = WarehouseSpecHelper::ValidParser2
-    @warehouse.parse(good_uri).should == WarehouseSpecHelper::ValidParser2.responce
+    it "should have a human readable identifier" do
+      @warehouse.should respond_to(:name)
+    end
+    
+    it "should have a unique name" do
+      @warehouse.save.should be(true)
+      @copy = Factory::Warehouse[:valid]
+      
+      @copy.should be(:valid)
+      @copy.name = @warehouse.name
+      @copy.should_not be(:valid)
+    end
   end
   
-  it "should not be the original parser when a parser is switched" #do
-  #  @warehouse.parser = WarehouseSpecHelper::ValidParser1
-  #  @warehouse.parser = WarehouseSpecHelper::ValidParser2
-  #  @warehouse.is_a?(WarehouseSpecHelper::ValidParser1).should be(false)
-  #  @warehouse.is_a?(WarehouseSpecHelper::ValidParser2).should be(true)
-  #end
-  
+  describe "should be a proxy and" do
+    before(:all) do
+      @parser = Factory::Warehouse[:new]
+    end
+    
+    it_should_behave_like "a parser with required methods"
+  end
+   # it "should be able to parse its website"# do
+ #     @parser = @warehouse
+      
+  #  end
 end
 
-#A parser in this case has the ability to use included method, ParserSpec has more specifics about parser
-shared_examples_for "a functioning parser" do
-  it "should be able to parse a uri" do
-    @warehouse.parse(good_uri).should == @warehouse.parser.responce
-  end
-end
 
+<<<<<<< HEAD:spec/models/warehouse_spec.rb
 describe Warehouse do
   include WarehouseSpecHelper
   
   describe "when newly created" do
     before(:each) do
       @warehouse = Warehouse.new
+=======
+=begin
+  describe "when newly created" do
+    
+    before(:each) do
+      @warehouse = Factory::Warehouse[:new]
+>>>>>>> master:spec/models/warehouse_spec.rb
     end
+    
+#    it_should_have_property(:name)   with(:unique => true)
+#    it_should_have_property(:parser) with(:unique => true)
     
     it_should_behave_like "a new record"
-      
-    it "should not have default values" do
-      @warehouse.name.should    be_nil
-      @warehouse.parser.should  be_nil
-      @warehouse.id.should      be_nil
-    end
     
     it "should not be valid" do
-      @warehouse.should_not be_valid
+      @warehouse.should_not be(:valid)
     end
     
     it "should have two errors after valid check" do
-      @warehouse.should_not be_valid
+      @warehouse.should_not be(:valid)
       @warehouse.errors.length.should be(2)
     end
     
-    it "should not have a default parser" do
-      lambda { @warehouse.parse(good_uri) }.should raise_error(NoMethodError)
+    it "should not have default values" do
+      @warehouse.name.should    be(nil)
+      @warehouse.parser.should  be(nil)
+      @warehouse.id.should      be(nil)
     end
+<<<<<<< HEAD:spec/models/warehouse_spec.rb
        
     it "should not be valid without a name" do
       Kernel.system("growlnotify -m " + "HELLO")
@@ -131,37 +151,51 @@ describe Warehouse do
       @warehouse.parser = nil
       
       @warehouse.should_not be_valid
-    end
-    
-    it_should_behave_like "a functioning parser manager"
+=======
   end
   
-  describe "(before save)" do
+  describe "when not saved" do
     before(:each) do
-      @warehouse = valid_warehouse
+      @warehouse = Factory::Warehouse[:valid]
     end
     
+    it_should_behave_like "a new record"
+    
+    it "should not be valid without #name" do
+      @warehouse.name = nil
+      @warehouse.should_not be(:valid)
+    end
+    
+    it "should not be valid without #parser" do
+      @warehouse.parser = nil
+      @warehouse.should_not be(:valid)
+>>>>>>> master:spec/models/warehouse_spec.rb
+    end
+  end
+  
+  describe "before save" do
+    before(:each) do
+      @warehouse = Factory::Warehouse[:valid]
+    end
+
     it "should be valid" do
-      @warehouse.should be_valid
+      @warehouse.should be(:valid)
     end
-    
+
     it "should have an original name" do
-      @warehouse.name = saved_warehouse.name
-      @warehouse.should_not be_valid
+      @warehouse.name = Factory::Warehouse[:saved].name
+      @warehouse.should_not be(:valid)
     end
-    
-    it_should_behave_like "a functioning parser manager"
-    it_should_behave_like "a functioning parser"
   end
 
-  describe "(after save)" do
+  describe "after save" do
     before(:each) do
-      @warehouse = saved_warehouse
+      @warehouse = Factory::Warehouse[:new]
     end
-    it "should not be a new record"
     
-    it_should_behave_like "a functioning parser manager"
-    it_should_behave_like "a functioning parser"
+    it "should not be a new record" do
+      @warehouse.should_not be(:valid)
+    end
   end
 
-end
+=end

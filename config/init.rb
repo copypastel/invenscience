@@ -18,11 +18,9 @@ end
  
 Merb::BootLoader.before_app_loads do
   # This will get executed after dependencies have been loaded but before your app's classes have loaded.
+  Merb.push_path(:parser, Merb.root / 'app' / 'parsers')
+  Merb::BootLoader::LoadClasses.load_classes( Merb.root / 'app' / 'parsers' / '*')
 end
  
 Merb::BootLoader.after_app_loads do
-  # This will get executed after your app's classes have been loaded.
-  
-  # Parsers
-  require 'app/parsers/sparkfun.rb'
 end
