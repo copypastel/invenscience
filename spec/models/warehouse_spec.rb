@@ -48,6 +48,8 @@ describe Warehouse do
     
     it_should_behave_like "a parser with required methods"
   end
+  
+  
    # it "should be able to parse its website"# do
  #     @parser = @warehouse
       
