@@ -20,6 +20,10 @@ describe Warehouse do
     before(:each) do
       @warehouse = Factory::Warehouse[:new]
     end
+    
+    it "should be a proxy" do
+      @warehouse.should be(includes,Parser::Proxy)
+    end
   end
   
   describe "when valid" do
