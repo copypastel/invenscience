@@ -7,7 +7,7 @@ require File.join( File.dirname(__FILE__),'factories','warehouse_factory' )
 #-----------------------------------------#
 shared_examples_for "a new record" do     
   it "should be a new record" do
-    @warehouse.should be_new_record
+    @warehouse.should be(:new_record)
   end
 end
  
@@ -22,8 +22,10 @@ describe Warehouse do
     end
     
     it "should be a proxy" do
-      @warehouse.should be(includes,Parser::Proxy)
+      @warehouse.class.include?(Parser::Proxy).should be(true)
     end
+    
+    it_should_behave_like "a new record"
   end
   
   describe "when valid" do
@@ -45,19 +47,24 @@ describe Warehouse do
     end
   end
   
-  describe "should be a proxy and" do
-    before(:all) do
-      @parser = Factory::Warehouse[:new]
+  describe "when in normal operation (saved)" do
+    before(:each) do
+      @warehouse = Factory::Warehouse[:saved]
     end
     
-    it_should_behave_like "a parser with required methods"
+    it "should have its own inventory" do
+      @warehouse.should respond_to(:items)
+    end
+    
+    it "should have a history of all orders made" do
+      @warehouse.should respond_to(:orders)
+    end
+    
+    it "should give the #price of an item when given an item with a matching manufacture ID and a quantity" 
+    
+    it "should give the #price of one item in the warehouse with no quantity given" 
+    
   end
-  
-  
-   # it "should be able to parse its website"# do
- #     @parser = @warehouse
-      
-  #  end
 end
  
  
