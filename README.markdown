@@ -8,6 +8,19 @@ Current Status
 
 Still starting off and getting the backend working properly. In other words, views aren't being touched with a 10-foot pole just yet. Models and their respective specs are the sole receivers of our love for now.
 
+Dependencies
+------------
+
+* merb
+* merb-helpers
+* merb-mailers
+* merb-param-protection
+* dm-aggregator
+* dm-timestamps
+* dm-types
+* dm-validations
+* mechanize
+
 Models
 ------
 
