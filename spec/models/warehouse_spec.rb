@@ -7,7 +7,7 @@ require File.join( File.dirname(__FILE__),'factories','warehouse_factory' )
 #-----------------------------------------#
 shared_examples_for "a new record" do     
   it "should be a new record" do
-    @warehouse.should be(:new_record)
+    @warehouse.should be_a_new_record
   end
 end
  
@@ -41,9 +41,9 @@ describe Warehouse do
       @warehouse.save.should be(true)
       @copy = Factory::Warehouse[:valid]
       
-      @copy.should be(:valid)
+      @copy.should be_valid
       @copy.name = @warehouse.name
-      @copy.should_not be(:valid)
+      @copy.should_not be_valid
     end
   end
   
