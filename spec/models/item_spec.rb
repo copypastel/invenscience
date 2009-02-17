@@ -1,24 +1,20 @@
 require File.join( File.dirname(__FILE__), '..', "spec_helper" )
+require File.join( File.dirname(__FILE__), '..', 'factories', 'item_factory')
 
 describe Item do
-  
-  before(:each) do
-    @item = Item.new
-  end
 
-  it "should have a name" do
-    @item.name = 'gps logger'
-    @item.name.should == 'gps logger'
-  end
-  
-  it "should not be valid unless it has a name" do
-    @item.valid?.should == false
-  end
-  
-  it "should save if valid" do
-    @item.name = 'gps logger'
-    @item.valid?.should == true
-    @item.save.should == true
-  end
+  describe "when valid" do
+    before(:each) do
+      @item = SpecFactory::Item.gen(:saved)
+    end
 
+    it "should have a unique name" do
+      copy = SpecFactory::Item.gen(:valid) do |model| 
+        model.name = @item.name 
+      end
+        
+      copy.should_not be_valid
+    end
+      
+  end
 end

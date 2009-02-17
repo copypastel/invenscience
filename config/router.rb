@@ -27,11 +27,9 @@
 
 Merb.logger.info("Compiling routes...")
 Merb::Router.prepare do
-  resources :carts
-  resources :orders
   # RESTful routes
   #resources :posts
-  resources :items
+  #resources :items
   resources :warehouses
   
   # Adds the required routes for merb-auth using the password slice

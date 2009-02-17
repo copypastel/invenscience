@@ -1,4 +1,4 @@
-module Factory
+module SpecFactory
   #TODO: Make these method names more generic.  I.e new_widget instead of new_model... 
   class Base
     #Class Methods
@@ -12,7 +12,7 @@ module Factory
         child.subclass = child
       end      
 
-      def [](option = :new, &block)
+      def gen(option,count = 1, &block)
         model = nil
         # *At #inherited none of the base class is loaded so no methods can be called.
         #  So it must be done here
@@ -20,11 +20,11 @@ module Factory
         
         case option
         when :new:
-          model = self.instance.new_model
+          model = self.instance.new_model(count)
         when :valid:
-          model = self.instance.valid_model
+          model = self.instance.valid_model(count)
         when :saved:
-          model = self.instance.saved_model
+          model = self.instance.saved_model(count)
         end
         
         raise NotImplementedError if model.nil?
