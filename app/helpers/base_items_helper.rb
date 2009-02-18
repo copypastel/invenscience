@@ -1,5 +1,5 @@
 module Merb
-  module ItemsHelper
+  module BaseItemsHelper
 
   end
 end # Merb

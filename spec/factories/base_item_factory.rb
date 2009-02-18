@@ -1,9 +1,10 @@
 require File.join( File.dirname(__FILE__), '..','spec_helper')
-require File.join( File.dirname(__FILE__), 'base_item_factory')
+require File.join( File.dirname(__FILE__), 'base')
 
 module SpecFactory
   
-  class Item < Base
+  class BaseItem < Base
+    MODEL_NAME = 'toothbrush'
     
     def initialize
       @new = true
@@ -11,24 +12,24 @@ module SpecFactory
     
     def new_model(count)
       clear_database if @new
-      ::Item.new
+      ::BaseItem.new
     end
     
     def valid_model(count)
       clear_database if @new
-      ::Item.new(:base_item_id => SpecFactory::BaseItem.gen(:saved).id)
+      ::BaseItem.new(:name => MODEL_NAME + ::BaseItem.count.to_s)
     end
     
     def saved_model(count)
       clear_database if @new
-      ::Item.first || ::Item.create(:base_item_id => SpecFactory::BaseItem.gen(:saved).id)
+      ::BaseItem.first(:name => MODEL_NAME + ::BaseItem.count.to_s) || ::BaseItem.create(:name => MODEL_NAME + ::BaseItem.count.to_s)
     end
     
     private
     
     def clear_database
       @new = false
-      ::Item.all.each { |i| i.destroy}
+      ::BaseItem.all.each { |b| b.destroy}
     end
     
   end

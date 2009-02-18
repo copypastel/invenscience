@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/shared_parser_examples'
 class Temp
   include Parser::Proxy
 end
-
+=begin
 describe Parser::Proxy do
   before(:all) do
     @parser = Temp
