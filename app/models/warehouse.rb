@@ -5,14 +5,13 @@ class Warehouse
   property :name, String, :unique => true
   property :parser, Object, :nullable => false
   
-  has n, :items, :through => :item_detail
+  has n, :items, :through => Resource, :class_name => "ItemDetail"
   
   def add(item)
     self.items.push(item)
   end
   
   def remove(item)
-    item.warehouse_id = nil
-    item.save
+    self.items.delete(item)
   end
 end
