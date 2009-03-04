@@ -14,18 +14,21 @@ class Warehouse
   end
   
   def add(item)
+    #the item must be valid and already be saved
+    return false unless item.valid? and not item.id.nil?
+
     if item.class == BaseItem
       base_item = item
-      if (item = self.items(:conditions => {:base_item_id => item.id}).first).nil?
-        item = self.items.create(:base_item_id => base_item.id)
-      end
-    elsif item.class == Item
-      if item.warehouse != self
-        item = self.items.create(:base_item_id => item.base_item.id)
-      end
+      item = self.items.first(:conditions => {:base_item_id => item.id}) ||
+             self.items.create(:base_item_id => base_item.id)
+    elsif item.class == Item and item.warehouse != self
+      item = self.items.first(:conditions => {:base_item_id => item.base_item.id}) ||
+             self.items.create(:base_item_id => item.base_item.id)
     end
+
     item.quantity += 1
-    item.save
+    if (returns = item.save) then self.items.reload; end
+    returns
   end
   
   def remove(item)
@@ -35,7 +38,6 @@ class Warehouse
       item = self.items(:conditions => {:base_item_id => item.base_item.id}).first
     end
     unless item.nil?
-      puts item.name
       item.quantity -= 1
       item.save
     else 

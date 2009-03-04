@@ -1,33 +1,33 @@
-require File.join( File.dirname(__FILE__), 'base_item_factory')
+require File.join( File.dirname(__FILE__), 'base')
 
 module SpecFactory
   
-  class Item < Base
-    
+  class PriceBreak < Base
+        
     def initialize
       @new = true
     end
     
     def new_model(count)
       clear_database if @new
-      ::Item.new
+      ::PriceBreak.new
     end
     
     def valid_model(count)
       clear_database if @new
-      ::Item.new(:base_item_id => SpecFactory::BaseItem.gen(:saved).id)
+      ::PriceBreak.new
     end
     
     def saved_model(count)
       clear_database if @new
-      ::Item.first || ::Item.create(:base_item_id => SpecFactory::BaseItem.gen(:saved).id)
+      ::PriceBreak.first() || ::PriceBreak.create()
     end
     
     private
     
     def clear_database
       @new = false
-      ::Item.all.each { |i| i.destroy}
+      ::PriceBreak.all.each { |p| p.destroy}
     end
     
   end

@@ -1,3 +1,5 @@
+require File.join( File.dirname(__FILE__), '..','spec_helper')
+
 module SpecFactory
   #TODO: Make these method names more generic.  I.e new_widget instead of new_model... 
   class Base

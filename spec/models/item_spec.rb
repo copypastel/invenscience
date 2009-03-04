@@ -17,6 +17,7 @@ describe Item do
       @item.base_item_id = nil
       @item.should_not be_valid
     end
+    
   end
   
   describe "when saving" do
@@ -35,6 +36,12 @@ describe Item do
       @item.save.should be(true)
       @item.quantity.should be(4)
     end
+    
+    it "should create a #price_break if saved when price_break is nil" do
+      @item.price_break = nil
+      @item.save.should be(true)
+      @item.price_break.class.should be(PriceBreak)
+    end
   end
 
   describe "when in operation" do
@@ -43,11 +50,17 @@ describe Item do
     end
    
     it "should keep track of #quantity" do
+      @item.should be_valid
       @item.should respond_to(:quantity)
     end
     
-    it "should return the base_items name wehn #name is called" do
+    it "should return the base_items name when #name is called" do
+      @item.should be_valid
       @item.name.should eql(@item.base_item.name)
+    end
+    
+    it "should return the #price_for a given quantity" do
+      @item.should respond_to(:price_for)
     end
     
   end

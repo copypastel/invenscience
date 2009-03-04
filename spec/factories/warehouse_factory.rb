@@ -1,4 +1,3 @@
-require File.join( File.dirname(__FILE__), '..','spec_helper')
 require File.join( File.dirname(__FILE__), 'base')
 require 'spec/mocks'
 #You have to be EXTREEMLY careful with scope... Maybe need to add WarehouseFactory in

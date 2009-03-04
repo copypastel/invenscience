@@ -39,38 +39,58 @@ describe Warehouse do
     
     it "should be able to #add items or base_items" do
       item = SpecFactory::Item.gen(:saved)
-      @warehouse.add(item).should      be(true)
-      @warehouse.items[0].base_item_id.should    eql(item.base_item_id)
-      @warehouse.items.size.should     be(1)
-      @warehouse.items[0].class.should be(Item)
+      @warehouse.add(item).should             be(true)
+      @warehouse.items[0].base_item_id.should eql(item.base_item_id)
+      @warehouse.items.size.should            be(1)
+      @warehouse.items[0].class.should        be(Item)
       
       base_item = SpecFactory::BaseItem.gen(:saved)
-      @warehouse.add(base_item).should be(true)
-      @warehouse.items[1].base_item_id.should    eql(base_item.id)
-      @warehouse.items.size.should     be(2)
-      @warehouse.items[1].class.should be(Item)
+      @warehouse.add(base_item).should        be(true)
+      @warehouse.items[1].base_item_id.should eql(base_item.id)
+      @warehouse.items.size.should            be(2)
+      @warehouse.items[1].class.should        be(Item)
     end
     
     it "should be able to #remove items or base_items" do
       base_item = SpecFactory::BaseItem.gen(:saved)
       @warehouse.add(base_item).should     be(true)
       @warehouse.remove(base_item).should  be(true)
-      @warehouse.stocked_items.size.should be(0)
+      @warehouse.stocked_items.size.should         be(0)
       
       item = SpecFactory::Item.gen(:saved)
-      @warehouse.add(item).should          be(true)
-      @warehouse.remove(item).should       be(true)
+      @warehouse.add(item).should    be(true)
+      @warehouse.remove(item).should be(true)
       @warehouse.stocked_items.size.should be(0)
     end
     
-    it "should update the items quantity when adding multiple items" do
-      item = SpecFactory::BaseItem.gen(:saved)
-      @warehouse.add(item)
-      @warehouse.add(item)
-      pending
-     # @warehouse.items.include?(item).should be(true)
-     # @warehouse.items.get(item).quantity.should be(2)
+    it "should update the item's quantity when adding multiple base items" do
+      base_item = SpecFactory::BaseItem.gen(:saved)
+      @warehouse.add(base_item).should           be(true)
+      @warehouse.add(base_item).should           be(true)
+      @warehouse.items.size.should               be(1)
+      @warehouse.items[0].base_item_id.should    be(base_item.id)
+      @warehouse.items[0].quantity.should        be(2)
     end
+    
+    it "should update the item's quantity when adding multiple items" do
+      item = SpecFactory::Item.gen(:saved)
+      @warehouse.add(item).should              be(true)
+      @warehouse.add(item).should              be(true)
+      @warehouse.items.size.should             be(1)
+      @warehouse.items[0].base_item_id.should  be(item.base_item_id)
+      @warehouse.items[0].quantity.should      be(2)
+    end
+    
+    it "should return false when adding a bad item" do
+      item = Item.new
+      @warehouse.add(item).should be(false)
+    end
+    
+    it "should return false when adding a bad base_item" do
+      base_item = BaseItem.new
+      @warehouse.add(base_item).should be(false)
+    end
+    
   end
   
   describe "when multiple warehouses exist" do
@@ -82,8 +102,8 @@ describe Warehouse do
       item = SpecFactory::BaseItem.gen(:saved)
       @warehouse1.add(item)
       @warehouse2.add(item)
-      @warehouse1.items[0].base_item_id.should    eql(item.id)
-      @warehouse2.items[0].base_item_id.should    eql(item.id)
+      @warehouse1.items[0].base_item_id.should  eql(item.id)
+      @warehouse2.items[0].base_item_id.should  eql(item.id)
     end
   
   end
