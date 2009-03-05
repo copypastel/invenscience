@@ -1,16 +1,22 @@
 require File.join( File.dirname(__FILE__), '..', "spec_helper" )
-require File.join( File.dirname(__FILE__), '..', 'factories', 'item_factory')
+require File.join( File.dirname(__FILE__), '..', "factories", 'base' )
+
+SpecFactory.define_valid Item do |i|
+  i.set :base_item_id, SpecFactory.gen(BaseItem, :saved).id
+  #puts SpecFactory.gen(BaseItem, :saved).id
+  #puts SpecFactory.gen(BaseItem, :saved).id
+end
 
 describe Item do
   describe "when first created" do
     before(:each) do
-      @item = SpecFactory::Item.gen(:new)
+      @item = SpecFactory.gen(Item, :new)
     end
     
   end
   describe "when valid" do 
     before(:each) do
-      @item = SpecFactory::Item.gen(:valid)
+      @item = SpecFactory.gen(Item, :valid)
     end
     
     it "must have a #base_item" do
@@ -22,7 +28,7 @@ describe Item do
   
   describe "when saving" do
     before(:each) do
-      @item = SpecFactory::Item.gen(:valid)
+      @item = SpecFactory.gen(Item, :valid)
     end
     
     it "should set #quantity to 0 if created when nil" do
@@ -46,7 +52,7 @@ describe Item do
 
   describe "when in operation" do
     before(:each) do
-      @item = SpecFactory::Item.gen(:saved)
+      @item = SpecFactory.gen(Item, :saved)
     end
    
     it "should keep track of #quantity" do

@@ -19,3 +19,14 @@ Spec::Runner.configure do |config|
   config.include(Merb::Test::RouteHelper)
   config.include(Merb::Test::ControllerHelper)
 end
+
+if defined?(FACTORY_CONSTANTS).nil?
+  FACTORY_CONSTANTS = []
+end
+
+def load_factory(factory)
+  unless FACTORY_CONSTANTS.include? factory
+    FACTORY_CONSTANTS.push factory
+    require File.join( File.dirname(__FILE__), 'factories', factory+'_factory') 
+  end
+end

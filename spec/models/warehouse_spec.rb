@@ -1,20 +1,24 @@
 require File.join( File.dirname(__FILE__), '..', "spec_helper" )
-require File.join( File.dirname(__FILE__), '..', 'factories', 'warehouse_factory')
-require File.join( File.dirname(__FILE__), '..', 'factories', 'base_item_factory')
-require File.join( File.dirname(__FILE__), '..', 'factories', 'item_factory')
+require File.join( File.dirname(__FILE__), '..', "factories", 'base' )
+require 'spec/mocks'
+
+SpecFactory.define_valid Warehouse do |w|
+  w.set :name, 'Sparkfun', :unique => true
+  w.set :parser, Spec::Mocks::Mock.new('parser')
+end
 
 describe Warehouse do
 
   describe "when valid" do
     before(:each) do
-      @warehouse = SpecFactory::Warehouse.gen(:saved)
+      @warehouse = SpecFactory.gen(Warehouse,:saved)
     end
     
     it "should have a unique name" do
-      copy = SpecFactory::Warehouse.gen(:valid) do |model| 
+      copy = SpecFactory.gen(Warehouse,:valid) do |model|
         model.name = @warehouse.name 
       end
-      
+
       copy.should_not be_valid
     end
     
@@ -23,10 +27,10 @@ describe Warehouse do
       @warehouse.should_not be_valid
     end
   end
-  
+
   describe "when in operation" do
     before(:each) do
-      @warehouse = SpecFactory::Warehouse.gen(:saved)
+      @warehouse = SpecFactory.gen(Warehouse,:saved)
     end
     
     after(:each) do
@@ -38,13 +42,13 @@ describe Warehouse do
     end
     
     it "should be able to #add items or base_items" do
-      item = SpecFactory::Item.gen(:saved)
+      item = SpecFactory.gen(Item,:saved)
       @warehouse.add(item).should             be(true)
       @warehouse.items[0].base_item_id.should eql(item.base_item_id)
       @warehouse.items.size.should            be(1)
       @warehouse.items[0].class.should        be(Item)
-      
-      base_item = SpecFactory::BaseItem.gen(:saved)
+      #make it so that a different base_item is added then that linking of an item
+      dummy,base_item = SpecFactory.gen(BaseItem,:saved,2)
       @warehouse.add(base_item).should        be(true)
       @warehouse.items[1].base_item_id.should eql(base_item.id)
       @warehouse.items.size.should            be(2)
@@ -52,19 +56,19 @@ describe Warehouse do
     end
     
     it "should be able to #remove items or base_items" do
-      base_item = SpecFactory::BaseItem.gen(:saved)
+      base_item = SpecFactory.gen(BaseItem, :saved)
       @warehouse.add(base_item).should     be(true)
       @warehouse.remove(base_item).should  be(true)
       @warehouse.stocked_items.size.should         be(0)
       
-      item = SpecFactory::Item.gen(:saved)
+      item = SpecFactory.gen(Item, :saved)
       @warehouse.add(item).should    be(true)
       @warehouse.remove(item).should be(true)
       @warehouse.stocked_items.size.should be(0)
     end
     
     it "should update the item's quantity when adding multiple base items" do
-      base_item = SpecFactory::BaseItem.gen(:saved)
+      base_item = SpecFactory.gen(BaseItem, :saved)
       @warehouse.add(base_item).should           be(true)
       @warehouse.add(base_item).should           be(true)
       @warehouse.items.size.should               be(1)
@@ -73,7 +77,7 @@ describe Warehouse do
     end
     
     it "should update the item's quantity when adding multiple items" do
-      item = SpecFactory::Item.gen(:saved)
+      item = SpecFactory.gen(Item, :saved)
       @warehouse.add(item).should              be(true)
       @warehouse.add(item).should              be(true)
       @warehouse.items.size.should             be(1)
@@ -82,12 +86,12 @@ describe Warehouse do
     end
     
     it "should return false when adding a bad item" do
-      item = Item.new
+      item = SpecFactory.gen(Item, :new)
       @warehouse.add(item).should be(false)
     end
     
     it "should return false when adding a bad base_item" do
-      base_item = BaseItem.new
+      base_item = SpecFactory.gen(BaseItem, :new)
       @warehouse.add(base_item).should be(false)
     end
     
@@ -95,17 +99,15 @@ describe Warehouse do
   
   describe "when multiple warehouses exist" do
     before(:each) do
-      @warehouse1,@warehouse2 = SpecFactory::Warehouse.gen(:saved,2)
+      @warehouse1,@warehouse2 = SpecFactory.gen(Warehouse, :saved, 2)
     end
     
     it "should be able to share items" do
-      item = SpecFactory::BaseItem.gen(:saved)
+      item = SpecFactory.gen(BaseItem, :saved)
       @warehouse1.add(item)
       @warehouse2.add(item)
       @warehouse1.items[0].base_item_id.should  eql(item.id)
       @warehouse2.items[0].base_item_id.should  eql(item.id)
     end
-  
   end
-
 end

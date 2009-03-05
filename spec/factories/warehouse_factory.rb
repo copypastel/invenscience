@@ -1,5 +1,6 @@
 require File.join( File.dirname(__FILE__), 'base')
 require 'spec/mocks'
+
 #You have to be EXTREEMLY careful with scope... Maybe need to add WarehouseFactory in
 module SpecFactory
   
@@ -53,4 +54,41 @@ module SpecFactory
     
   end
     
+end
+
+describe SpecFactory::Warehouse do
+  it "should #gen one new model when no count is given" do
+    warehouse = SpecFactory::Warehouse.gen(:new)
+    warehouse.should be_new_record
+  end
+  
+  it "should #gen multiple new models when a count is given" do
+    warehouse1, warehouse2 = SpecFactory::Warehouse.gen(:new,2)
+    warehouse1.should be_new_record
+    warehouse2.should be_new_record
+  end
+  
+  it "should #gen one valid model when no count is given" do
+    warehouse = SpecFactory::Warehouse.gen(:valid)
+    warehouse.should be_valid
+  end
+  
+  it "should #gen multiple new models when a count is given" do
+    warehouse1, warehouse2 = SpecFactory::Warehouse.gen(:valid,2)
+    warehouse1.should be_valid
+    warehouse2.should be_valid
+  end
+  
+  it "should #gen one saved model when no count is given" do
+    warehouse = SpecFactory::Warehouse.gen(:saved)
+    warehouse.should be_valid
+    warehouse.should_not be_new_record
+  end
+  
+  it "should #gen the same saved model each time" do
+    warehouse1 = SpecFactory::Warehouse.gen(:saved)
+    warehouse2 = SpecFactory::Warehouse.gen(:saved)
+    
+    warehouse1.id.should eql(warehouse2.id) 
+  end
 end

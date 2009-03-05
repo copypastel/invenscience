@@ -3,7 +3,7 @@ require File.join( File.dirname(__FILE__), 'base')
 module SpecFactory
   
   class BaseItem < Base
-    MODEL_NAME = 'toothbrush'
+    MODEL_NAMEs = 'toothbrush'
     
     def initialize
       @new = true
@@ -16,12 +16,12 @@ module SpecFactory
     
     def valid_model(count)
       clear_database if @new
-      ::BaseItem.new(:name => MODEL_NAME + ::BaseItem.count.to_s)
+      ::BaseItem.new(:name => MODEL_NAMEs + ::BaseItem.count.to_s)
     end
     
     def saved_model(count)
       clear_database if @new
-      ::BaseItem.first(:name => MODEL_NAME + ::BaseItem.count.to_s) || ::BaseItem.create(:name => MODEL_NAME + ::BaseItem.count.to_s)
+      ::BaseItem.first(:name => MODEL_NAMEs + ::BaseItem.count.to_s) || ::BaseItem.create(:name => MODEL_NAMEs + ::BaseItem.count.to_s)
     end
     
     private

@@ -1,9 +1,9 @@
 require File.join(File.dirname(__FILE__), '..', 'spec_helper.rb')
-require File.join(File.dirname(__FILE__), '..', 'factories', 'warehouse_factory')
+require File.join( File.dirname(__FILE__), '..', "factories", 'base' )
 
 given "a warehouse exists" do
   Warehouse.all.destroy!
-  warehouse = SpecFactory::Warehouse.gen(:valid)
+  warehouse = SpecFactory.gen(Warehouse,:valid)
   request(resource(:warehouses), :method => "POST", 
     :params => { :warehouse => warehouse.attributes })
 end
@@ -40,7 +40,7 @@ describe "resource(:warehouses)" do
   describe "a successful POST" do
     before(:each) do
       Warehouse.all.destroy!
-      warehouse = SpecFactory::Warehouse.gen(:valid)
+      warehouse = SpecFactory.gen(Warehouse,:valid)
       @response = request(resource(:warehouses), :method => "POST", 
         :params => { :warehouse =>  warehouse.attributes })
     end
