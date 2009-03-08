@@ -20,6 +20,7 @@ class Item
   end
   
   def price_for(quantity)
+    self.price_break.price_for(quantity)
   end
   
 end
