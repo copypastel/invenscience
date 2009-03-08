@@ -50,7 +50,6 @@ describe Item do
     end
    
     it "should keep track of #quantity" do
-      @item.should be_valid
       @item.should respond_to(:quantity)
     end
     

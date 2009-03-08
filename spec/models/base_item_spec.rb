@@ -5,15 +5,19 @@ describe BaseItem do
 
   describe "when valid" do
     before(:each) do
-      @base_item = SpecFactory.gen(BaseItem, :saved)
+      @base_item = SpecFactory.gen(BaseItem, :valid)
     end
 
     it "should have a unique name" do
-      copy = SpecFactory.gen(BaseItem, :valid) do |model| 
-        model.name = @base_item.name 
-      end
-        
-      copy.should_not be_valid
+      saved = SpecFactory.gen(BaseItem, :saved)
+      
+      @base_item.name = saved.name
+      @base_item.should_not be_valid
+    end
+    
+    it "must have a #name" do
+      @base_item.name = nil
+      @base_item.should_not be_valid
     end
       
   end
