@@ -43,7 +43,7 @@ module SpecFactory
       end
       
       def create_valid(klass, quantity)
-        require File.join( File.dirname(__FILE__), '..','models',klass.to_s.snake_case + '_spec') if @@valid_definitions[klass].nil?
+        require File.join( File.dirname(__FILE__), klass.to_s.snake_case + '_factory') if @@valid_definitions[klass].nil?
         
         attributes = @@valid_definitions[klass].gen_attributes
         

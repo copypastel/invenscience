@@ -1,12 +1,6 @@
 require File.join( File.dirname(__FILE__), '..', "spec_helper" )
 require File.join( File.dirname(__FILE__), '..', "factories", 'base' )
 
-SpecFactory.define_valid Item do |i|
-  i.set :base_item_id, SpecFactory.gen(BaseItem, :saved).id
-  #puts SpecFactory.gen(BaseItem, :saved).id
-  #puts SpecFactory.gen(BaseItem, :saved).id
-end
-
 describe Item do
   describe "when first created" do
     before(:each) do

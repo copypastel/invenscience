@@ -1,11 +1,5 @@
 require File.join( File.dirname(__FILE__), '..', "spec_helper" )
 require File.join( File.dirname(__FILE__), '..', "factories", 'base' )
-require 'spec/mocks'
-
-SpecFactory.define_valid Warehouse do |w|
-  w.set :name, 'Sparkfun', :unique => true
-  w.set :parser, Spec::Mocks::Mock.new('parser')
-end
 
 describe Warehouse do
 

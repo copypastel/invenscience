@@ -1,10 +1,5 @@
 require File.join( File.dirname(__FILE__), '..', "spec_helper" )
 require File.join( File.dirname(__FILE__), '..', "factories", 'base' )
-#load_factory('base_item')
-
-SpecFactory.define_valid BaseItem do |b|
-  b.set :name, 'Toothbrush', :unique => true
-end
 
 describe BaseItem do
 

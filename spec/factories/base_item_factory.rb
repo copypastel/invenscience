@@ -1,36 +1,5 @@
 require File.join( File.dirname(__FILE__), 'base')
 
-module SpecFactory
-  
-  class BaseItem < Base
-    MODEL_NAMEs = 'toothbrush'
-    
-    def initialize
-      @new = true
-    end
-    
-    def new_model(count)
-      clear_database if @new
-      ::BaseItem.new
-    end
-    
-    def valid_model(count)
-      clear_database if @new
-      ::BaseItem.new(:name => MODEL_NAMEs + ::BaseItem.count.to_s)
-    end
-    
-    def saved_model(count)
-      clear_database if @new
-      ::BaseItem.first(:name => MODEL_NAMEs + ::BaseItem.count.to_s) || ::BaseItem.create(:name => MODEL_NAMEs + ::BaseItem.count.to_s)
-    end
-    
-    private
-    
-    def clear_database
-      @new = false
-      ::BaseItem.all.each { |b| b.destroy}
-    end
-    
-  end
-    
+SpecFactory.define_valid BaseItem do |b|
+  b.set :name, 'Toothbrush', :unique => true
 end
