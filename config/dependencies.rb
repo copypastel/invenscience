@@ -24,3 +24,5 @@ dependency "dm-validations", dm_gems_version
 
 dependency "hpricot"
 dependency "mechanize"
+
+require File.join( File.dirname(__FILE__), '..', "lib", 'item_manager' )
