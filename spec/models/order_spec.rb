@@ -11,5 +11,15 @@ describe Order do
 
      it_should_behave_like "an item manager"
    end
-
+   
+   describe "when valid" do
+     before(:each) do
+       @order = SpecFactory.gen(Order,:valid)
+     end
+     
+     it "should must be correltaed to a project" do
+       @order.project = nil
+       @order.should_not be_valid
+     end
+   end
 end

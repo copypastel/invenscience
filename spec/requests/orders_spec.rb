@@ -1,9 +1,11 @@
 require File.join(File.dirname(__FILE__), '..', 'spec_helper.rb')
+require File.join( File.dirname(__FILE__), '..', "factories", 'base' )
 
 given "a order exists" do
   Order.all.destroy!
+  order = SpecFactory.gen(Order,:valid)
   request(resource(:orders), :method => "POST", 
-    :params => { :order => { :id => nil }})
+    :params => { :order => order.attributes })
 end
 
 describe "resource(:orders)" do
@@ -38,8 +40,9 @@ describe "resource(:orders)" do
   describe "a successful POST" do
     before(:each) do
       Order.all.destroy!
+      order = SpecFactory.gen(Order,:valid)
       @response = request(resource(:orders), :method => "POST", 
-        :params => { :order => { :id => nil }})
+        :params => { :order => order.attributes })
     end
     
     it "redirects to resource(:orders)" do

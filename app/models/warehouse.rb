@@ -9,10 +9,11 @@ class Warehouse
   has n, :items
   has n, :base_items, :through => Resource, :class_name => "Item"
   
-  ########################
-  #hooks for ItemManager #
-  alias item_hook items  #
-  ########################
+  ################################
+  #    hooks for ItemManager     #
+  alias item_hook items          #
+  def item_class_hook; Item; end #
+  ################################
   
   def stocked_items
     #TODO: is this safe?  Do I need to do :warehouse_id => ?...

@@ -28,10 +28,6 @@ describe Warehouse do
       @warehouse = SpecFactory.gen(Warehouse,:saved)
     end
     
-    after(:each) do
-      Item.all.each {|w| w.destroy}
-    end
-    
     it "should have items" do
       @warehouse.should respond_to(:items)
     end
